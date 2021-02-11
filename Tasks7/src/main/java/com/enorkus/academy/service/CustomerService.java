@@ -30,35 +30,31 @@ public class CustomerService {
 
     public void insertCustomer(@RequestBody Customer customer) {
         validator.validateCustomerFields(customer);
-        formatCustomerFields(customer);
         customerRepository.insert(createNewCustomer(customer));
     }
 
 
-    private void formatCustomerFields(Customer customer) {
-        fixedName = customer.getFirstName();
-        fixedLastName = customer.getLastName();
-        fixedPersonalNumber = customer.getPersonalNumber();
-
-        if (fixedName.length() != 0) {
-            fixedName = fixedName.substring(0, 1).toUpperCase() + fixedName.substring(1);
+    private String capitaliseFirstLetter(String attribute) {
+        if (attribute.length() != 0) {
+            return attribute.substring(0, 1).toUpperCase() + attribute.substring(1);
         }
+        return attribute;
+    }
 
-        if (fixedLastName.length() != 0) {
-            fixedLastName = fixedLastName.substring(0, 1).toUpperCase() + fixedLastName.substring(1);
+    private String formatPersonalNumber(String personalNumber) {
+        personalNumber = personalNumber.replace("-", "");
+        if (personalNumber.length() > 4) {
+            return (personalNumber.substring(0, 4) + "-" + personalNumber.substring(4));
         }
-
-        if (fixedPersonalNumber.length() > 4) {
-            fixedPersonalNumber = fixedPersonalNumber.substring(0, 4) + "_" + fixedPersonalNumber.substring(4);
-        }
+        return personalNumber;
     }
 
     private Customer createNewCustomer(Customer customer) {
         return new Customer.CustomerBuilder()
                 .withId(customer.getId())
-                .withFirstName(fixedName)
-                .withLastName(fixedLastName)
-                .withPersonalNumber(fixedPersonalNumber)
+                .withFirstName(capitaliseFirstLetter(customer.getFirstName()))
+                .withLastName(capitaliseFirstLetter(customer.getLastName()))
+                .withPersonalNumber(formatPersonalNumber(customer.getPersonalNumber()))
                 .withMiddleName(customer.getMiddleName())
                 .withAge(customer.getAge())
                 .withCity(customer.getCity())
