@@ -1,0 +1,22 @@
+.posts {
+  width: 100%;
+  margin-top: 20px;
+  margin-left: 35px;
+}
+
+.image {
+  float: left;
+  width: 200px;
+  height: 150px;
+  margin-right: 15px;
+}
+
+.post-header {
+  color: #eb5e0b;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.post {
+  margin-bottom: 25px;
+}
